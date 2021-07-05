@@ -1,1 +1,114 @@
+Q1 - JUMP GAME II 
+SOL. -
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+      if(nums.size()<2) return 0;
+        int jump=1,n=nums.size(),currjmp=nums[0],mxjmp=nums[0];
+        
+        int i=0;
+        while(i<n-1)
+        {
+            mxjmp=max(mxjmp,i+nums[i]);
+             
+            if(currjmp==i)
+            {
+                jump++;
+                currjmp=mxjmp; 
+            }
+            i++;
+        }
+        return jump;  
+    }
+};
+ 
+Q2 - Keys and Rooms
+SOL. -
+class Solution {
+public:
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        unordered_set<int> visited;
+        queue<int> to_visit;
+        to_visit.push(0);
+        while(!to_visit.empty()) {
+            int curr = to_visit.front();
+            to_visit.pop();
+            visited.insert(curr);
+            for (int k : rooms[curr]) if (visited.find(k) == visited.end()) to_visit.push(k);
+        }
+        return visited.size() == rooms.size();
+    }
+};
 
+Q3 - Last Stone Weight II
+SOL. - 
+class Solution {
+public:
+    vector<int> subsetsum(vector<int> arr,int n,int sum){
+	    int dp[n+1][sum+1];
+	    vector<int> resu;
+	    for(int i=0;i<n+1;i++)
+	    dp[i][0]=1;
+	    for(int j=1;j<sum+1;j++)
+	    dp[0][j]=0;
+	    for(int i=1;i<=n;i++){
+	        for(int j=1;j<sum+1;j++){
+	            if(arr[i-1]>j)
+	            dp[i][j]=dp[i-1][j];
+	            else
+	            dp[i][j]=dp[i-1][j]||dp[i-1][j-arr[i-1]];
+	        }
+	    } 
+	    for(int i=0;i<=sum/2;i++){
+	        if(dp[n][i])
+	    resu.push_back(i);
+	    } 
+	    return resu;
+	}
+    int lastStoneWeightII(vector<int>& arr) {
+        int n=arr.size();
+      int sum=0;
+	    for(int i=0;i<n;i++)
+	    sum+=arr[i];
+	    vector<int> res=subsetsum(arr,n,sum);
+	    int mi=INT_MAX;
+	    for(int i=0;i<res.size();i++)
+	    mi=min(mi,sum-2*res[i]);
+	    return mi;
+	    }   
+};
+
+*Q4 - Integer Break (dp solution not done)
+SOL -
+class Solution {
+public:
+     long long integerBreak(long long n) {
+        if(n == 2) return 1;
+        if(n == 3) return 2;
+        if(n == 4) return 4;
+        if(n == 5) return 6;
+        if(n == 6) return 9;
+        return 3 * integerBreak(n - 3);
+    }
+};
+
+Q5 - Find the Town Judge
+SOL - 
+class Solution {
+public:
+    int findJudge(int N, vector<vector<int>>& trust) {
+        vector<int> in(N+1);
+        vector<int> out(N+1);
+        if(trust.empty()&& N==1)
+            return 1;
+        for(auto &i:trust){
+            in[i[0]]++;
+            out[i[1]]++;
+        }
+        for(int i=1;i<=N;i++){
+            if(in[i]==0 &&out[i]==N-1)
+                return i;
+        }
+        return -1;
+    }
+};
